@@ -1,0 +1,5 @@
+[tool.pylint.main]
+max-line-length = 120
+
+# disable missing docstring warnings
+disable = C0114, C0115, C0116
