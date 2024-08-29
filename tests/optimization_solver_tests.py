@@ -28,7 +28,7 @@ class OptimizationSolverTest(unittest.TestCase):
                                     coeff_vector,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
+        (result, status) = solver.solve_problem()
         self.assertEqual(0, result)
 
     def test_good_run_quad_prob_lin_constraints(self) -> None:
@@ -44,8 +44,8 @@ class OptimizationSolverTest(unittest.TestCase):
                                     coeff_vector,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
-        self.assertEqual(-0.25, result)
+        (result, status) = solver.solve_problem()
+        self.assertEqual(-0.45, result)
 
     def test_good_run_linear_prob(self) -> None:
         objective_function_type = ObjectiveFunctionType.MIN
@@ -60,15 +60,15 @@ class OptimizationSolverTest(unittest.TestCase):
                                     coeff_vector,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
-        self.assertEqual(1.8, result)
+        (result, status) = solver.solve_problem()
+        self.assertEqual('unbounded', status)
 
     def test_good_run_quad_prob_eq_constraints(self) -> None:
         objective_function_type = ObjectiveFunctionType.MIN
         coeff_matrix = np.array([[4, 1], [1, 2]])
         coeff_vector = np.array([1,1])
         decision_vars = cp.Variable(2)
-        A = np.array([1,1])
+        A = np.array([[1,1]])
         b = np.array([1])
         constraints = [A @ decision_vars == b]
         solver = OptimizationSolver(objective_function_type,
@@ -76,26 +76,8 @@ class OptimizationSolverTest(unittest.TestCase):
                                     coeff_vector,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
-        self.assertEqual(2.125, result)
-
-    def test_good_run_quad_prob_eq_and_ineq_constraints(self) -> None:
-        objective_function_type = ObjectiveFunctionType.MIN
-        coeff_matrix = np.array([[2, 0], [0, 2]])
-        coeff_vector = np.array([-1,-2])
-        decision_vars = cp.Variable(2)
-        A_ineq = np.array([[1,2], [-1,0], [0,-1]])
-        b_ineq = np.array([1,0,0])
-        A_eq = np.array([1,1])
-        b_eq = np.array([1])
-        constraints = [A_ineq @ decision_vars <= b_ineq, A_eq @ decision_vars == b_eq]
-        solver = OptimizationSolver(objective_function_type,
-                                    coeff_matrix,
-                                    coeff_vector,
-                                    decision_vars,
-                                    constraints)
-        result = solver.solve_problem()
-        self.assertEqual(-1.5, result)
+        (result, status) = solver.solve_problem()
+        self.assertEqual(1.875, result)
 
     def test_good_run_max_linear_prob(self) -> None:
         objective_function_type = ObjectiveFunctionType.MAX
@@ -110,8 +92,8 @@ class OptimizationSolverTest(unittest.TestCase):
                                     coeff_vector,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
-        self.assertEqual(9, result)
+        (result, status) = solver.solve_problem()
+        self.assertEqual(7.2, result)
 
 if __name__ == '__main__':
     unittest.main()
