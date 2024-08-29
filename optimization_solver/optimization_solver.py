@@ -30,7 +30,7 @@ class OptimizationSolver:
             obj_func = cp.Maximize(0.5 * cp.quad_form(self._decision_vars, self._coeff_matrix)
                                     + self._coeff_vector.T @ self._decision_vars)
         problem = cp.Problem(obj_func, self._constraints)
-        return problem.solve()
+        return (problem.solve(), problem.status)
 
 
 

@@ -30,10 +30,11 @@ if __name__ == "__main__":
                                     vector_input,
                                     decision_vars,
                                     constraints)
-        result = solver.solve_problem()
+        (result, status) = solver.solve_problem()
 
         print()
         print("Optimization Complete!")
+        print("Problem Status:", status)
         print("Optimal value:", result)
         print("Optimal variables:", decision_vars.value)
 
